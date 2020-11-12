@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Projet_Electro_Appli.X
+PROJECTNAME=Projet_Electronique_Applique
 
 # Active Configuration
 DEFAULTCONF=default

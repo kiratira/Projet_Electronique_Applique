@@ -1,0 +1,836 @@
+
+
+Microchip MPLAB XC8 Assembler V2.30 build 20200825195618 
+                                                                                               Thu Nov 12 14:52:04 2020
+
+Microchip MPLAB XC8 C Compiler v2.30 (Free license) build 20200825195618 Og1 
+     1                           	processor	16F876A
+     2                           	pagewidth 120
+     3                           	opt	flic
+     4                           	psect	idataBANK0,global,class=CODE,delta=2,noexec
+     5                           	psect	idataBANK1,global,class=CODE,delta=2,noexec
+     6                           	psect	cinit,global,class=CODE,merge=1,delta=2
+     7                           	psect	dataBANK0,global,class=BANK0,space=1,delta=1,noexec
+     8                           	psect	dataBANK1,global,class=BANK1,space=1,delta=1,noexec
+     9                           	psect	inittext,global,class=CODE,delta=2
+    10                           	psect	cstackCOMMON,global,class=COMMON,space=1,delta=1,noexec
+    11                           	psect	cstackBANK0,global,class=BANK0,space=1,delta=1,noexec
+    12                           	psect	maintext,global,class=CODE,split=1,delta=2
+    13                           	psect	text1,local,class=CODE,merge=1,delta=2
+    14                           	psect	config,global,abs,ovrld,class=CONFIG,space=4,delta=2,noexec
+    15                           	dabs	1,0x7E,2
+    16  0000                     
+    17                           ; Version 2.20
+    18                           ; Generated 12/02/2020 GMT
+    19                           ; 
+    20                           ; Copyright © 2020, Microchip Technology Inc. and its subsidiaries ("Microchip")
+    21                           ; All rights reserved.
+    22                           ; 
+    23                           ; This software is developed by Microchip Technology Inc. and its subsidiaries ("Microch
+      +                          ip").
+    24                           ; 
+    25                           ; Redistribution and use in source and binary forms, with or without modification, are
+    26                           ; permitted provided that the following conditions are met:
+    27                           ; 
+    28                           ;     1. Redistributions of source code must retain the above copyright notice, this lis
+      +                          t of
+    29                           ;        conditions and the following disclaimer.
+    30                           ; 
+    31                           ;     2. Redistributions in binary form must reproduce the above copyright notice, this 
+      +                          list
+    32                           ;        of conditions and the following disclaimer in the documentation and/or other
+    33                           ;        materials provided with the distribution.
+    34                           ; 
+    35                           ;     3. Microchip's name may not be used to endorse or promote products derived from th
+      +                          is
+    36                           ;        software without specific prior written permission.
+    37                           ; 
+    38                           ; THIS SOFTWARE IS PROVIDED BY MICROCHIP "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    39                           ; INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS F
+      +                          OR
+    40                           ; PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL MICROCHIP BE LIABLE FOR ANY DIRECT, INDIREC
+      +                          T,
+    41                           ; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO
+    42                           ; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR PROFITS; OR BUSINESS
+    43                           ; INTERRUPTION) HOWSOEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, ST
+      +                          RICT
+    44                           ; LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE U
+      +                          SE OF
+    45                           ; THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    46                           ; 
+    47                           ; 
+    48                           ; Code-generator required, PIC16F876A Definitions
+    49                           ; 
+    50                           ; SFR Addresses
+    51  0000                     	;# 
+    52  0001                     	;# 
+    53  0002                     	;# 
+    54  0003                     	;# 
+    55  0004                     	;# 
+    56  0005                     	;# 
+    57  0006                     	;# 
+    58  0007                     	;# 
+    59  000A                     	;# 
+    60  000B                     	;# 
+    61  000C                     	;# 
+    62  000D                     	;# 
+    63  000E                     	;# 
+    64  000E                     	;# 
+    65  000F                     	;# 
+    66  0010                     	;# 
+    67  0011                     	;# 
+    68  0012                     	;# 
+    69  0013                     	;# 
+    70  0014                     	;# 
+    71  0015                     	;# 
+    72  0015                     	;# 
+    73  0016                     	;# 
+    74  0017                     	;# 
+    75  0018                     	;# 
+    76  0019                     	;# 
+    77  001A                     	;# 
+    78  001B                     	;# 
+    79  001B                     	;# 
+    80  001C                     	;# 
+    81  001D                     	;# 
+    82  001E                     	;# 
+    83  001F                     	;# 
+    84  0081                     	;# 
+    85  0085                     	;# 
+    86  0086                     	;# 
+    87  0087                     	;# 
+    88  008C                     	;# 
+    89  008D                     	;# 
+    90  008E                     	;# 
+    91  0091                     	;# 
+    92  0092                     	;# 
+    93  0093                     	;# 
+    94  0094                     	;# 
+    95  0098                     	;# 
+    96  0099                     	;# 
+    97  009C                     	;# 
+    98  009D                     	;# 
+    99  009E                     	;# 
+   100  009F                     	;# 
+   101  010C                     	;# 
+   102  010D                     	;# 
+   103  010E                     	;# 
+   104  010F                     	;# 
+   105  018C                     	;# 
+   106  018D                     	;# 
+   107  0000                     	;# 
+   108  0001                     	;# 
+   109  0002                     	;# 
+   110  0003                     	;# 
+   111  0004                     	;# 
+   112  0005                     	;# 
+   113  0006                     	;# 
+   114  0007                     	;# 
+   115  000A                     	;# 
+   116  000B                     	;# 
+   117  000C                     	;# 
+   118  000D                     	;# 
+   119  000E                     	;# 
+   120  000E                     	;# 
+   121  000F                     	;# 
+   122  0010                     	;# 
+   123  0011                     	;# 
+   124  0012                     	;# 
+   125  0013                     	;# 
+   126  0014                     	;# 
+   127  0015                     	;# 
+   128  0015                     	;# 
+   129  0016                     	;# 
+   130  0017                     	;# 
+   131  0018                     	;# 
+   132  0019                     	;# 
+   133  001A                     	;# 
+   134  001B                     	;# 
+   135  001B                     	;# 
+   136  001C                     	;# 
+   137  001D                     	;# 
+   138  001E                     	;# 
+   139  001F                     	;# 
+   140  0081                     	;# 
+   141  0085                     	;# 
+   142  0086                     	;# 
+   143  0087                     	;# 
+   144  008C                     	;# 
+   145  008D                     	;# 
+   146  008E                     	;# 
+   147  0091                     	;# 
+   148  0092                     	;# 
+   149  0093                     	;# 
+   150  0094                     	;# 
+   151  0098                     	;# 
+   152  0099                     	;# 
+   153  009C                     	;# 
+   154  009D                     	;# 
+   155  009E                     	;# 
+   156  009F                     	;# 
+   157  010C                     	;# 
+   158  010D                     	;# 
+   159  010E                     	;# 
+   160  010F                     	;# 
+   161  018C                     	;# 
+   162  018D                     	;# 
+   163                           
+   164                           	psect	idataBANK0
+   165  0718                     __pidataBANK0:
+   166                           
+   167                           ;initializer for main@F785
+   168  0718  34AA               	retlw	170
+   169  0719  3455               	retlw	85
+   170  071A  3400               	retlw	0
+   171  071B  340A               	retlw	10
+   172  071C  3440               	retlw	64
+   173                           
+   174                           ;initializer for main@F779
+   175  071D  3440               	retlw	64
+   176  071E  3446               	retlw	70
+   177  071F  344E               	retlw	78
+   178  0720  3442               	retlw	66
+   179                           
+   180                           	psect	idataBANK1
+   181  0744                     __pidataBANK1:
+   182                           
+   183                           ;initializer for main@F777
+   184  0744  3444               	retlw	68
+   185  0745  3400               	retlw	0
+   186  0746  34F5               	retlw	245
+   187  0747  3400               	retlw	0
+   188  0748  348C               	retlw	140
+   189  0749  3400               	retlw	0
+   190  074A  34A4               	retlw	164
+   191  074B  3400               	retlw	0
+   192  074C  3435               	retlw	53
+   193  074D  3400               	retlw	0
+   194  074E  3426               	retlw	38
+   195  074F  3400               	retlw	0
+   196  0750  3406               	retlw	6
+   197  0751  3400               	retlw	0
+   198  0752  34F4               	retlw	244
+   199  0753  3400               	retlw	0
+   200  0754  3404               	retlw	4
+   201  0755  3400               	retlw	0
+   202  0756  3424               	retlw	36
+   203  0757  3400               	retlw	0
+   204  0758  3414               	retlw	20
+   205  0759  3400               	retlw	0
+   206  075A  3407               	retlw	7
+   207  075B  3400               	retlw	0
+   208  075C  344E               	retlw	78
+   209  075D  3400               	retlw	0
+   210  075E  3485               	retlw	133
+   211  075F  3400               	retlw	0
+   212  0760  340E               	retlw	14
+   213  0761  3400               	retlw	0
+   214  0762  341E               	retlw	30
+   215  0763  3400               	retlw	0
+   216  0013                     _SSPBUF	set	19
+   217  001A                     _RCREG	set	26
+   218  0018                     _RCSTAbits	set	24
+   219  0019                     _TXREG	set	25
+   220  000C                     _PIR1bits	set	12
+   221  0006                     _PORTBbits	set	6
+   222  0014                     _SSPCON	set	20
+   223  0018                     _RCSTA	set	24
+   224  0091                     _SSPCON2bits	set	145
+   225  0098                     _TXSTAbits	set	152
+   226  0086                     _TRISB	set	134
+   227  0085                     _TRISA	set	133
+   228  009F                     _ADCON1	set	159
+   229  009D                     _CVRCON	set	157
+   230  009C                     _CMCON	set	156
+   231  0093                     _SSPADD	set	147
+   232  0091                     _SSPCON2	set	145
+   233  0094                     _SSPSTAT	set	148
+   234  0099                     _SPBRG	set	153
+   235  0098                     _TXSTA	set	152
+   236  0087                     _TRISC	set	135
+   237                           
+   238                           	psect	cinit
+   239  07E1                     start_initialization:	
+   240                           ; #config settings
+   241                           
+   242  07E1                     __initialization:
+   243                           
+   244                           ; Initialize objects allocated to BANK1
+   245  07E1  1383               	bcf	3,7	;select IRP bank0
+   246  07E2  30C0               	movlw	low (__pdataBANK1+32)
+   247  07E3  00FD               	movwf	btemp+-1
+   248  07E4  3007               	movlw	high __pidataBANK1
+   249  07E5  00FE               	movwf	btemp
+   250  07E6  3044               	movlw	low __pidataBANK1
+   251  07E7  00FF               	movwf	btemp+1
+   252  07E8  30A0               	movlw	low __pdataBANK1
+   253  07E9  0084               	movwf	4
+   254  07EA  120A  118A  2735  120A  118A  	fcall	init_ram0
+   255                           
+   256                           ; Initialize objects allocated to BANK0
+   257  07EF  3055               	movlw	low (__pdataBANK0+9)
+   258  07F0  00FD               	movwf	btemp+-1
+   259  07F1  3007               	movlw	high __pidataBANK0
+   260  07F2  00FE               	movwf	btemp
+   261  07F3  3018               	movlw	low __pidataBANK0
+   262  07F4  00FF               	movwf	btemp+1
+   263  07F5  304C               	movlw	low __pdataBANK0
+   264  07F6  0084               	movwf	4
+   265  07F7  120A  118A  2735  120A  118A  	fcall	init_ram0
+   266  07FC                     end_of_initialization:	
+   267                           ;End of C runtime variable initialization code
+   268                           
+   269  07FC                     __end_of__initialization:
+   270  07FC  0183               	clrf	3
+   271  07FD  120A  118A  2F64   	ljmp	_main	;jump to C main() function
+   272                           
+   273                           	psect	dataBANK0
+   274  004C                     __pdataBANK0:
+   275  004C                     main@F785:
+   276  004C                     	ds	5
+   277  0051                     main@F779:
+   278  0051                     	ds	4
+   279                           
+   280                           	psect	dataBANK1
+   281  00A0                     __pdataBANK1:
+   282  00A0                     main@F777:
+   283  00A0                     	ds	32
+   284                           
+   285                           	psect	inittext
+   286  0731                     init_fetch0:	
+   287                           ;	Called with low address in FSR and high address in W
+   288                           
+   289  0731  087E               	movf	btemp,w
+   290  0732  008A               	movwf	10
+   291  0733  087F               	movf	btemp+1,w
+   292  0734  0082               	movwf	2
+   293  0735                     init_ram0:	
+   294                           ;Called with:
+   295                           ;	high address of idata address in btemp 
+   296                           ;	low address of idata address in btemp+1 
+   297                           ;	low address of data in FSR
+   298                           ;	high address + 1 of data in btemp-1
+   299                           
+   300  0735  120A  118A  2731  120A  118A  	fcall	init_fetch0
+   301  073A  0080               	movwf	0
+   302  073B  0A84               	incf	4,f
+   303  073C  0804               	movf	4,w
+   304  073D  067D               	xorwf	btemp+-1,w
+   305  073E  1903               	btfsc	3,2
+   306  073F  3400               	retlw	0
+   307  0740  0AFF               	incf	btemp+1,f
+   308  0741  1903               	btfsc	3,2
+   309  0742  0AFE               	incf	btemp,f
+   310  0743  2F35               	goto	init_ram0
+   311                           
+   312                           	psect	cstackCOMMON
+   313  0070                     __pcstackCOMMON:
+   314  0070                     ?_sendDataUART:
+   315  0070                     ??_sendDataUART:	
+   316                           ; 1 bytes @ 0x0
+   317                           
+   318  0070                     ?_main:	
+   319                           ; 1 bytes @ 0x0
+   320                           
+   321  0070                     sendDataUART@data:	
+   322                           ; 1 bytes @ 0x0
+   323                           
+   324                           
+   325                           ; 1 bytes @ 0x0
+   326  0070                     	ds	1
+   327  0071                     ??_main:
+   328                           
+   329                           ; 1 bytes @ 0x1
+   330  0071                     	ds	4
+   331                           
+   332                           	psect	cstackBANK0
+   333  0020                     __pcstackBANK0:
+   334  0020                     main@pos_segment:
+   335                           
+   336                           ; 32 bytes @ 0x0
+   337  0020                     	ds	32
+   338  0040                     main@Seg:
+   339                           
+   340                           ; 4 bytes @ 0x20
+   341  0040                     	ds	4
+   342  0044                     main@data:
+   343                           
+   344                           ; 5 bytes @ 0x24
+   345  0044                     	ds	7
+   346  004B                     main@cp:
+   347                           
+   348                           ; 1 bytes @ 0x2B
+   349  004B                     	ds	1
+   350                           
+   351                           	psect	maintext
+   352  0764                     __pmaintext:	
+   353 ;;
+   354 ;;Main: autosize = 0, tempsize = 4, incstack = 0, save=0
+   355 ;;
+   356 ;; *************** function _main *****************
+   357 ;; Defined at:
+   358 ;;		line 26 in file "Radar.c"
+   359 ;; Parameters:    Size  Location     Type
+   360 ;;		None
+   361 ;; Auto vars:     Size  Location     Type
+   362 ;;  pos_segment    32    0[BANK0 ] int [16]
+   363 ;;  trame          10    0        unsigned char [10]
+   364 ;;  data            5   36[BANK0 ] unsigned char [5]
+   365 ;;  Seg             4   32[BANK0 ] unsigned char [4]
+   366 ;;  cp              1   43[BANK0 ] unsigned char 
+   367 ;;  start           1    0        unsigned char 
+   368 ;;  cp2             1    0        unsigned char 
+   369 ;; Return value:  Size  Location     Type
+   370 ;;                  1    wreg      void 
+   371 ;; Registers used:
+   372 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+   373 ;; Tracked objects:
+   374 ;;		On entry : B00/0
+   375 ;;		On exit  : 0/0
+   376 ;;		Unchanged: 0/0
+   377 ;; Data sizes:     COMMON   BANK0   BANK1   BANK3   BANK2
+   378 ;;      Params:         0       0       0       0       0
+   379 ;;      Locals:         0      44       0       0       0
+   380 ;;      Temps:          4       0       0       0       0
+   381 ;;      Totals:         4      44       0       0       0
+   382 ;;Total ram usage:       48 bytes
+   383 ;; Hardware stack levels required when called:    1
+   384 ;; This function calls:
+   385 ;;		_sendDataUART
+   386 ;; This function is called by:
+   387 ;;		Startup code after reset
+   388 ;; This function uses a non-reentrant model
+   389 ;;
+   390                           
+   391                           
+   392                           ;psect for function _main
+   393  0764                     _main:
+   394  0764                     l783:	
+   395                           ;incstack = 0
+   396                           ; Regs used in _main: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+   397                           
+   398                           
+   399                           ;Radar.c: 29:     TRISC = 255;
+   400  0764  30FF               	movlw	255
+   401  0765  1683               	bsf	3,5	;RP0=1, select bank1
+   402  0766  1303               	bcf	3,6	;RP1=0, select bank1
+   403  0767  0087               	movwf	7	;volatile
+   404  0768                     l785:
+   405                           
+   406                           ;Radar.c: 30:     TXSTA = 0;
+   407  0768  0198               	clrf	24	;volatile
+   408  0769                     l787:
+   409                           
+   410                           ;Radar.c: 31:     RCSTA = 0b10000000;
+   411  0769  3080               	movlw	128
+   412  076A  1283               	bcf	3,5	;RP0=0, select bank0
+   413  076B  1303               	bcf	3,6	;RP1=0, select bank0
+   414  076C  0098               	movwf	24	;volatile
+   415  076D                     l789:
+   416                           
+   417                           ;Radar.c: 32:     SPBRG = 25;
+   418  076D  3019               	movlw	25
+   419  076E  1683               	bsf	3,5	;RP0=1, select bank1
+   420  076F  1303               	bcf	3,6	;RP1=0, select bank1
+   421  0770  0099               	movwf	25	;volatile
+   422  0771                     l791:
+   423                           
+   424                           ;Radar.c: 34:     SSPSTAT = 0b10000000;
+   425  0771  3080               	movlw	128
+   426  0772  0094               	movwf	20	;volatile
+   427  0773                     l793:
+   428                           
+   429                           ;Radar.c: 35:     SSPCON = 0b00101000;
+   430  0773  3028               	movlw	40
+   431  0774  1283               	bcf	3,5	;RP0=0, select bank0
+   432  0775  1303               	bcf	3,6	;RP1=0, select bank0
+   433  0776  0094               	movwf	20	;volatile
+   434  0777                     l795:
+   435                           
+   436                           ;Radar.c: 36:     SSPCON2 = 0;
+   437  0777  1683               	bsf	3,5	;RP0=1, select bank1
+   438  0778  1303               	bcf	3,6	;RP1=0, select bank1
+   439  0779  0191               	clrf	17	;volatile
+   440                           
+   441                           ;Radar.c: 37:     SSPADD = 39;
+   442  077A  3027               	movlw	39
+   443  077B  0093               	movwf	19	;volatile
+   444                           
+   445                           ;Radar.c: 39:     CMCON = 7;
+   446  077C  3007               	movlw	7
+   447  077D  009C               	movwf	28	;volatile
+   448  077E                     l797:
+   449                           
+   450                           ;Radar.c: 40:     CVRCON = 0;
+   451  077E  019D               	clrf	29	;volatile
+   452  077F                     l799:
+   453                           
+   454                           ;Radar.c: 41:     ADCON1 = 6;
+   455  077F  3006               	movlw	6
+   456  0780  009F               	movwf	31	;volatile
+   457  0781                     l801:
+   458                           
+   459                           ;Radar.c: 42:     TRISA = 0b00000011;
+   460  0781  3003               	movlw	3
+   461  0782  0085               	movwf	5	;volatile
+   462  0783                     l803:
+   463                           
+   464                           ;Radar.c: 43:     TRISB = 0b00000000;
+   465  0783  0186               	clrf	6	;volatile
+   466  0784                     l805:
+   467                           
+   468                           ;Radar.c: 45:     int pos_segment[16]={0b01000100,0b11110101,0b10001100,0b10100100,0b001
+      +                          10101,0b00100110,0b00000110,0b11110100,0b00000100,0b00100100,0b00010100,0b00000111,0b010
+      +                          01110,0b10000101,0b00001110, 0b00011110};
+   469  0784  3020               	movlw	main@pos_segment& (0+255)
+   470  0785  0084               	movwf	4
+   471  0786  30A0               	movlw	low main@F777
+   472  0787  00F1               	movwf	??_main
+   473  0788  0804               	movf	4,w
+   474  0789  00F2               	movwf	??_main+1
+   475  078A  3020               	movlw	32
+   476  078B  00F3               	movwf	??_main+2
+   477  078C                     u70:
+   478  078C  0871               	movf	??_main,w
+   479  078D  0084               	movwf	4
+   480  078E  1383               	bcf	3,7	;select IRP bank1
+   481  078F  0800               	movf	0,w
+   482  0790  00F4               	movwf	??_main+3
+   483  0791  0AF1               	incf	??_main,f
+   484  0792  0872               	movf	??_main+1,w
+   485  0793  0084               	movwf	4
+   486  0794  0874               	movf	??_main+3,w
+   487  0795  0080               	movwf	0
+   488  0796  0AF2               	incf	??_main+1,f
+   489  0797  0BF3               	decfsz	??_main+2,f
+   490  0798  2F8C               	goto	u70
+   491  0799                     l807:
+   492                           
+   493                           ;Radar.c: 46:     char Seg[4] = {0b01000000,0b01000110,0b01001110,0b01000010};
+   494  0799  1283               	bcf	3,5	;RP0=0, select bank0
+   495  079A  1303               	bcf	3,6	;RP1=0, select bank0
+   496  079B  0854               	movf	main@F779+3,w
+   497  079C  00C3               	movwf	main@Seg+3
+   498  079D  0853               	movf	main@F779+2,w
+   499  079E  00C2               	movwf	main@Seg+2
+   500  079F  0852               	movf	main@F779+1,w
+   501  07A0  00C1               	movwf	main@Seg+1
+   502  07A1  0851               	movf	main@F779,w
+   503  07A2  00C0               	movwf	main@Seg
+   504  07A3                     l809:
+   505                           
+   506                           ;Radar.c: 47:     char cp = 0;
+   507  07A3  01CB               	clrf	main@cp
+   508  07A4                     l811:
+   509  07A4                     l813:
+   510  07A4                     l815:
+   511                           
+   512                           ;Radar.c: 52:     char data[5] = {0b10101010,0b01010101,0b00000000,0b00001010,0b01000000
+      +                          };
+   513  07A4  3044               	movlw	main@data& (0+255)
+   514  07A5  0084               	movwf	4
+   515  07A6  084C               	movf	main@F785,w
+   516  07A7  0080               	movwf	0
+   517  07A8  0A84               	incf	4,f
+   518  07A9  084D               	movf	main@F785+1,w
+   519  07AA  0080               	movwf	0
+   520  07AB  0A84               	incf	4,f
+   521  07AC  084E               	movf	main@F785+2,w
+   522  07AD  0080               	movwf	0
+   523  07AE  0A84               	incf	4,f
+   524  07AF  084F               	movf	main@F785+3,w
+   525  07B0  0080               	movwf	0
+   526  07B1  0A84               	incf	4,f
+   527  07B2  0850               	movf	main@F785+4,w
+   528  07B3  0080               	movwf	0
+   529  07B4                     l817:
+   530                           
+   531                           ;Radar.c: 53:     PORTBbits.RB5 = 0;
+   532  07B4  1286               	bcf	6,5	;volatile
+   533  07B5                     l819:
+   534                           
+   535                           ;Radar.c: 54:     PORTBbits.RB4 = 0;
+   536  07B5  1206               	bcf	6,4	;volatile
+   537  07B6                     l821:
+   538                           
+   539                           ;Radar.c: 59:         PORTBbits.RB4 = 1;
+   540  07B6  1283               	bcf	3,5	;RP0=0, select bank0
+   541  07B7  1303               	bcf	3,6	;RP1=0, select bank0
+   542  07B8  1606               	bsf	6,4	;volatile
+   543                           
+   544                           ;Radar.c: 60:         while(cp < 5){
+   545  07B9  2FCA               	goto	l827
+   546  07BA                     l823:
+   547                           
+   548                           ;Radar.c: 61:             sendDataUART(data[cp]);
+   549  07BA  084B               	movf	main@cp,w
+   550  07BB  3E44               	addlw	(low (main@data| 0))& (0+255)
+   551  07BC  0084               	movwf	4
+   552  07BD  1383               	bcf	3,7	;select IRP bank0
+   553  07BE  0800               	movf	0,w
+   554  07BF  120A  118A  2721  120A  118A  	fcall	_sendDataUART
+   555  07C4                     l825:
+   556                           
+   557                           ;Radar.c: 62:             cp++;
+   558  07C4  3001               	movlw	1
+   559  07C5  00F1               	movwf	??_main
+   560  07C6  0871               	movf	??_main,w
+   561  07C7  1283               	bcf	3,5	;RP0=0, select bank0
+   562  07C8  1303               	bcf	3,6	;RP1=0, select bank0
+   563  07C9  07CB               	addwf	main@cp,f
+   564  07CA                     l827:
+   565                           
+   566                           ;Radar.c: 60:         while(cp < 5){
+   567  07CA  3005               	movlw	5
+   568  07CB  024B               	subwf	main@cp,w
+   569  07CC  1C03               	skipc
+   570  07CD  2FCF               	goto	u81
+   571  07CE  2FD0               	goto	u80
+   572  07CF                     u81:
+   573  07CF  2FBA               	goto	l823
+   574  07D0                     u80:
+   575  07D0                     l62:
+   576                           
+   577                           ;Radar.c: 64:         PORTBbits.RB5 = 1;
+   578  07D0  1686               	bsf	6,5	;volatile
+   579  07D1                     l829:
+   580                           
+   581                           ;Radar.c: 65:         _delay((unsigned long)((5000)*(16000000/4000.0)));
+   582  07D1  3066               	movlw	102
+   583  07D2  00F3               	movwf	??_main+2
+   584  07D3  3076               	movlw	118
+   585  07D4  00F2               	movwf	??_main+1
+   586  07D5  30C1               	movlw	193
+   587  07D6  00F1               	movwf	??_main
+   588  07D7                     u97:
+   589  07D7  0BF1               	decfsz	??_main,f
+   590  07D8  2FD7               	goto	u97
+   591  07D9  0BF2               	decfsz	??_main+1,f
+   592  07DA  2FD7               	goto	u97
+   593  07DB  0BF3               	decfsz	??_main+2,f
+   594  07DC  2FD7               	goto	u97
+   595  07DD  2FB6               	goto	l821
+   596  07DE  120A  118A  2800   	ljmp	start
+   597  07E1                     __end_of_main:
+   598                           
+   599                           	psect	text1
+   600  0721                     __ptext1:	
+   601 ;; *************** function _sendDataUART *****************
+   602 ;; Defined at:
+   603 ;;		line 91 in file "Radar.c"
+   604 ;; Parameters:    Size  Location     Type
+   605 ;;  data            1    wreg     unsigned char 
+   606 ;; Auto vars:     Size  Location     Type
+   607 ;;  data            1    0[COMMON] unsigned char 
+   608 ;; Return value:  Size  Location     Type
+   609 ;;                  1    wreg      void 
+   610 ;; Registers used:
+   611 ;;		wreg
+   612 ;; Tracked objects:
+   613 ;;		On entry : 0/0
+   614 ;;		On exit  : 0/0
+   615 ;;		Unchanged: 0/0
+   616 ;; Data sizes:     COMMON   BANK0   BANK1   BANK3   BANK2
+   617 ;;      Params:         0       0       0       0       0
+   618 ;;      Locals:         1       0       0       0       0
+   619 ;;      Temps:          0       0       0       0       0
+   620 ;;      Totals:         1       0       0       0       0
+   621 ;;Total ram usage:        1 bytes
+   622 ;; Hardware stack levels used:    1
+   623 ;; This function calls:
+   624 ;;		Nothing
+   625 ;; This function is called by:
+   626 ;;		_main
+   627 ;; This function uses a non-reentrant model
+   628 ;;
+   629                           
+   630                           
+   631                           ;psect for function _sendDataUART
+   632  0721                     _sendDataUART:
+   633                           
+   634                           ;incstack = 0
+   635                           ; Regs used in _sendDataUART: [wreg]
+   636                           ;sendDataUART@data stored from wreg
+   637  0721  00F0               	movwf	sendDataUART@data
+   638  0722                     l779:
+   639                           
+   640                           ;Radar.c: 93:     PIR1bits.TXIF = 0;
+   641  0722  1283               	bcf	3,5	;RP0=0, select bank0
+   642  0723  1303               	bcf	3,6	;RP1=0, select bank0
+   643  0724  120C               	bcf	12,4	;volatile
+   644                           
+   645                           ;Radar.c: 94:     TXSTAbits.TXEN = 1;
+   646  0725  1683               	bsf	3,5	;RP0=1, select bank1
+   647  0726  1303               	bcf	3,6	;RP1=0, select bank1
+   648  0727  1698               	bsf	24,5	;volatile
+   649  0728                     l781:
+   650                           
+   651                           ;Radar.c: 95:     TXREG = data;
+   652  0728  0870               	movf	sendDataUART@data,w
+   653  0729  1283               	bcf	3,5	;RP0=0, select bank0
+   654  072A  1303               	bcf	3,6	;RP1=0, select bank0
+   655  072B  0099               	movwf	25	;volatile
+   656  072C                     l68:	
+   657                           ;Radar.c: 96:     while(!PIR1bits.TXIF);
+   658                           
+   659  072C  1E0C               	btfss	12,4	;volatile
+   660  072D  2F2F               	goto	u61
+   661  072E  2F30               	goto	u60
+   662  072F                     u61:
+   663  072F  2F2C               	goto	l68
+   664  0730                     u60:
+   665  0730                     l71:
+   666  0730  0008               	return
+   667  0731                     __end_of_sendDataUART:
+   668  007E                     btemp	set	126	;btemp
+   669  007E                     wtemp0	set	126
+   670                           
+   671                           	psect	config
+   672                           
+   673                           ;Config register CONFIG @ 0x2007
+   674                           ;	Oscillator Selection bits
+   675                           ;	FOSC = HS, HS oscillator
+   676                           ;	Watchdog Timer Enable bit
+   677                           ;	WDTE = OFF, WDT disabled
+   678                           ;	Power-up Timer Enable bit
+   679                           ;	PWRTE = OFF, PWRT disabled
+   680                           ;	Brown-out Reset Enable bit
+   681                           ;	BOREN = OFF, BOR disabled
+   682                           ;	Low-Voltage (Single-Supply) In-Circuit Serial Programming Enable bit
+   683                           ;	LVP = OFF, RB3 is digital I/O, HV on MCLR must be used for programming
+   684                           ;	Data EEPROM Memory Code Protection bit
+   685                           ;	CPD = OFF, Data EEPROM code protection off
+   686                           ;	Flash Program Memory Write Enable bits
+   687                           ;	WRT = OFF, Write protection off; all program memory may be written to by EECON control
+   688                           ;	In-Circuit Debugger Mode bit
+   689                           ;	DEBUG = 0x1, unprogrammed default
+   690                           ;	Flash Program Memory Code Protection bit
+   691                           ;	CP = OFF, Code protection off
+   692  2007                     	org	8199
+   693  2007  3F3A               	dw	16186
+
+Data Sizes:
+    Strings     0
+    Constant    0
+    Data        41
+    BSS         0
+    Persistent  0
+    Stack       0
+
+Auto Spaces:
+    Space          Size  Autos    Used
+    COMMON           14      5       5
+    BANK0            80     44      53
+    BANK1            80      0      32
+    BANK3            96      0       0
+    BANK2            96      0       0
+
+Pointer List with Targets:
+
+    None.
+
+Critical Paths under _main in COMMON
+
+    _main->_sendDataUART
+
+Critical Paths under _main in BANK0
+
+    None.
+
+Critical Paths under _main in BANK1
+
+    None.
+
+Critical Paths under _main in BANK3
+
+    None.
+
+Critical Paths under _main in BANK2
+
+    None.
+
+Call Graph Tables:
+
+ ---------------------------------------------------------------------------------
+ (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+ ---------------------------------------------------------------------------------
+ (0) _main                                                58    58      0      96
+                                              1 COMMON     4     4      0
+                                              0 BANK0     44    44      0
+                       _sendDataUART
+ ---------------------------------------------------------------------------------
+ (1) _sendDataUART                                         1     1      0      22
+                                              0 COMMON     1     1      0
+ ---------------------------------------------------------------------------------
+ Estimated maximum stack depth 1
+ ---------------------------------------------------------------------------------
+
+ Call Graph Graphs:
+
+ _main (ROOT)
+   _sendDataUART
+
+ Address spaces:
+Name               Size   Autos  Total    Cost      Usage
+BANK3               60      0       0       9        0.0%
+BITBANK3            60      0       0       8        0.0%
+SFR3                 0      0       0       4        0.0%
+BITSFR3              0      0       0       4        0.0%
+BANK2               60      0       0      11        0.0%
+BITBANK2            60      0       0      10        0.0%
+SFR2                 0      0       0       5        0.0%
+BITSFR2              0      0       0       5        0.0%
+BANK1               50      0      20       7       40.0%
+BITBANK1            50      0       0       6        0.0%
+SFR1                 0      0       0       2        0.0%
+BITSFR1              0      0       0       2        0.0%
+BANK0               50     2C      35       5       66.2%
+BITBANK0            50      0       0       4        0.0%
+SFR0                 0      0       0       1        0.0%
+BITSFR0              0      0       0       1        0.0%
+COMMON               E      5       5       1       35.7%
+BITCOMMON            E      0       0       0        0.0%
+CODE                 0      0       0       0        0.0%
+DATA                 0      0      5A      12        0.0%
+ABS                  0      0      5A       3        0.0%
+NULL                 0      0       0       0        0.0%
+STACK                0      0       0       2        0.0%
+EEDATA             100      0       0       0        0.0%
+
+
+Microchip Technology PIC Macro Assembler V2.30 build 20200825195618 
+Symbol Table                                                                                   Thu Nov 12 14:52:04 2020
+
+                      pc 0002                       l62 07D0                       l71 0730  
+                     l68 072C                       u60 0730                       u61 072F  
+                     u70 078C                       u80 07D0                       u81 07CF  
+                     u97 07D7                       fsr 0004                      l801 0781  
+                    l811 07A4                      l803 0783                      l821 07B6  
+                    l813 07A4                      l805 0784                      l823 07BA  
+                    l815 07A4                      l807 0799                      l825 07C4  
+                    l817 07B4                      l809 07A3                      l827 07CA  
+                    l819 07B5                      l781 0728                      l829 07D1  
+                    l791 0771                      l783 0764                      l793 0773  
+                    l785 0768                      l779 0722                      l795 0777  
+                    l787 0769                      l797 077E                      l789 076D  
+                    l799 077F                      fsr0 0004                      indf 0000  
+                   _main 0764                     btemp 007E                     start 0000  
+                  ?_main 0070                    _CMCON 009C                    _RCREG 001A  
+                  _RCSTA 0018                    _SPBRG 0099                    _TRISA 0085  
+                  _TRISB 0086                    _TRISC 0087                    _TXREG 0019  
+                  _TXSTA 0098                    pclath 000A                    status 0003  
+                  wtemp0 007E          __initialization 07E1             __end_of_main 07E1  
+                 ??_main 0071                   _ADCON1 009F                   _CVRCON 009D  
+                 _SSPADD 0093                   _SSPCON 0014                   _SSPBUF 0013  
+                 main@cp 004B  __end_of__initialization 07FC           __pcstackCOMMON 0070  
+           __pidataBANK0 0718             __pidataBANK1 0744            ?_sendDataUART 0070  
+             __pmaintext 0764           ??_sendDataUART 0070                  _SSPCON2 0091  
+                _SSPSTAT 0094                  __ptext1 0721                  main@Seg 0040  
+   end_of_initialization 07FC                _RCSTAbits 0018                _PORTBbits 0006  
+   __end_of_sendDataUART 0731                _TXSTAbits 0098      start_initialization 07E1  
+             init_fetch0 0731              __pdataBANK0 004C              __pdataBANK1 00A0  
+              ___latbits 0002            __pcstackBANK0 0020    __size_of_sendDataUART 0010  
+               _PIR1bits 000C             _sendDataUART 0721            __size_of_main 007D  
+               main@F777 00A0                 main@F785 004C                 main@F779 0051  
+               main@data 0044                 init_ram0 0735          main@pos_segment 0020  
+            _SSPCON2bits 0091         sendDataUART@data 0070  

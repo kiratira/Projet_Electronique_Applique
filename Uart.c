@@ -131,7 +131,7 @@ char waitFlag(){
     }
     return 0;
 }
-
+/*
 void __interrupt() receivedData(void){
     
     Led5 = !Led5;
@@ -139,3 +139,4 @@ void __interrupt() receivedData(void){
     tampon = RCREG;
     PIR1bits.RCIF = 0;    
 }
+ * */

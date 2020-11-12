@@ -1612,7 +1612,7 @@ void main(void) {
     char trame[10];
     char start = 0;
 
-    char data[5] = {10101010,01010101,00000000,00001010,01000000};
+    char data[5] = {0b10101010,0b01010101,0b00000000,0b00001010,0b01000000};
     PORTBbits.RB5 = 0;
     PORTBbits.RB4 = 0;
 
