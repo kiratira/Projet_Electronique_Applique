@@ -15,24 +15,24 @@
 # $ makeMP_CC="/opt/microchip/mplabc30/v3.30c/bin/pic30-gcc" ...  
 #
 SHELL=cmd.exe
-PATH_TO_IDE_BIN=D:/trash/mplab_platform/platform/../mplab_ide/modules/../../bin/
+PATH_TO_IDE_BIN=C:/Program Files (x86)/Microchip/MPLABX/v5.40/mplab_platform/platform/../mplab_ide/modules/../../bin/
 # Adding MPLAB X bin directory to path.
-PATH:=D:/trash/mplab_platform/platform/../mplab_ide/modules/../../bin/:$(PATH)
+PATH:=C:/Program Files (x86)/Microchip/MPLABX/v5.40/mplab_platform/platform/../mplab_ide/modules/../../bin/:$(PATH)
 # Path to java used to run MPLAB X when this makefile was created
-MP_JAVA_PATH="D:\trash\sys\java\zulu8.36.0.1-ca-fx-jdk8.0.202-win_x64\jre/bin/"
+MP_JAVA_PATH="C:\Program Files (x86)\Microchip\MPLABX\v5.40\sys\java\zulu8.36.0.1-ca-fx-jdk8.0.202-win_x64\jre/bin/"
 OS_CURRENT="$(shell uname -s)"
-MP_CC="D:\trash\bin\xc8-cc.exe"
+MP_CC="C:\Program Files\Microchip\xc8\v2.30\bin\xc8-cc.exe"
 # MP_CPPC is not defined
 # MP_BC is not defined
-MP_AS="D:\trash\bin\xc8-cc.exe"
-MP_LD="D:\trash\bin\xc8-cc.exe"
-MP_AR="D:\trash\bin\xc8-ar.exe"
-DEP_GEN=${MP_JAVA_PATH}java -jar "D:/trash/mplab_platform/platform/../mplab_ide/modules/../../bin/extractobjectdependencies.jar"
-MP_CC_DIR="D:\trash\bin"
+MP_AS="C:\Program Files\Microchip\xc8\v2.30\bin\xc8-cc.exe"
+MP_LD="C:\Program Files\Microchip\xc8\v2.30\bin\xc8-cc.exe"
+MP_AR="C:\Program Files\Microchip\xc8\v2.30\bin\xc8-ar.exe"
+DEP_GEN=${MP_JAVA_PATH}java -jar "C:/Program Files (x86)/Microchip/MPLABX/v5.40/mplab_platform/platform/../mplab_ide/modules/../../bin/extractobjectdependencies.jar"
+MP_CC_DIR="C:\Program Files\Microchip\xc8\v2.30\bin"
 # MP_CPPC_DIR is not defined
 # MP_BC_DIR is not defined
-MP_AS_DIR="D:\trash\bin"
-MP_LD_DIR="D:\trash\bin"
-MP_AR_DIR="D:\trash\bin"
+MP_AS_DIR="C:\Program Files\Microchip\xc8\v2.30\bin"
+MP_LD_DIR="C:\Program Files\Microchip\xc8\v2.30\bin"
+MP_AR_DIR="C:\Program Files\Microchip\xc8\v2.30\bin"
 # MP_BC_DIR is not defined
-DFP_DIR=D:/trash/packs/Microchip/PIC16Fxxx_DFP/1.2.33
+DFP_DIR=C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC16Fxxx_DFP/1.2.33

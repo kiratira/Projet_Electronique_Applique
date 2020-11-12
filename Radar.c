@@ -12,7 +12,7 @@
 #pragma config CPD = OFF        // Data EEPROM Memory Code Protection bit (Data EEPROM code protection off)
 #pragma config WRT = OFF        // Flash Program Memory Write Enable bits (Write protection off; all program memory may be written to by EECON control)
 #pragma config CP = OFF  
-
+// test de modification
 #include <xc.h>
 #define _XTAL_FREQ 16000000
 #define Led4 PORTBbits.RB4
@@ -65,7 +65,7 @@ void main(void) {
         __delay_ms(5000);
         /*
        Led4 = 0; //DEBUG
-       start = getDataUART(); //Il plante ICI le 2ème passage
+       start = getDataUART(); //Il plante ICI le 2ï¿½me passage
        __delay_ms(1000); //DEBUG
        Led4 = !Led4; //DEBUG
        if(start == 170){
