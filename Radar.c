@@ -14,11 +14,12 @@
 #pragma config CP = OFF  
 // test de modification
 #include <xc.h>
-#define _XTAL_FREQ 16000000
-#define Led4 PORTBbits.RB4
+#define _XTAL_FREQ 16000000   // Fréquence de la clock 16MHz
+#define Led4 PORTBbits.RB4       // les Led 4 et 5 sont utiliséent pour des tests
 #define Led5 PORTBbits.RB5
 
-void sendDataUART(char data);
+// Déclaration de fonction ( envoyer, recevoir, envoyer sur les 7 segments, attendre la remise à zéro du flag)
+void sendDataUART(char data);  
 char getDataUART();
 char sendData7Seg(char address, char data);
 char waitFlag();
@@ -41,21 +42,22 @@ void main(void) {
     ADCON1 = 6;         //disable analog
     TRISA = 0b00000011;
     TRISB = 0b00000000;    
-    
+    // Déclaration du tableau pour les 7 segments
     int pos_segment[16]={0b01000100,0b11110101,0b10001100,0b10100100,0b00110101,0b00100110,0b00000110,0b11110100,0b00000100,0b00100100,0b00010100,0b00000111,0b01001110,0b10000101,0b00001110, 0b00011110};
+    // Déclaration du tableau pour choisir les 7 segments
     char Seg[4] = {0b01000000,0b01000110,0b01001110,0b01000010};
+    // Compteur 
     char cp = 0;
     char cp2 = 1;
+    // trame de base
     char trame[10];
     char start = 0;
-    
+    // tableau de valeur à envoyer au radar
     char data[5] = {0b10101010,0b01010101,0b00000000,0b00001010,0b01000000};
     Led5 = 0;
     Led4 = 0;
-    
+    // Boucle infinie
     while(1){
-
-        
         Led4 = 1;
         while(cp < 5){
             sendDataUART(data[cp]);
@@ -87,7 +89,7 @@ void main(void) {
     return;
 }
 
-
+// Fonction pour envoyer des données au radar
 void sendDataUART(char data){
     
     PIR1bits.TXIF = 0;
@@ -95,7 +97,7 @@ void sendDataUART(char data){
     TXREG = data;
     while(!PIR1bits.TXIF);
 }
-
+// Fonction pour recevoir des données du radar
 char getDataUART(){
     char data;
         
@@ -106,7 +108,7 @@ char getDataUART(){
     
     return data;
 }
-
+// fontion pour envoyer des données vers les 7 segments
 char sendData7Seg(char address, char data){
 
     char flag = 0;
@@ -125,7 +127,7 @@ char sendData7Seg(char address, char data){
     return flag;
     
 }
-
+// Fonction pour attendre le flag
 char waitFlag(){
     char cpt = 0;   
     while(!PIR1bits.SSPIF){
