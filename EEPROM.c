@@ -29,10 +29,10 @@
 
 //------------------------------ FONCTION ECRITURE EEPROM ------------------------------------------------------------------------------------------------------------------------------------------
 
-// Ecris une donnee a l'adresse x de l'EEPROM
+// Ecris une donnee a l'adresse x de l'EEPROM 
 void Ecriture_EEPROM(unsigned char adresse, unsigned char data);
 
-// Ecris un enregistrement du radar dans l'EEPROM (utilise des donn�e individuelle)
+// Ecris un enregistrement du radar et du la RTC  dans l'EEPROM (utilise des donnée individuelle)
 void Stockage_EEPROM(
         unsigned char annee,
         unsigned char mois,
@@ -51,18 +51,18 @@ void Stockage_TAB_EEPROM(unsigned char TAB[8],unsigned char NB_elem);
 
 // Lis la donnee qui se trouve a l'adresse x de l'EEPROM
 unsigned char Lecture_E(unsigned char adresse);
-// TODO
+// Lis et Transmets dans le [Tab_transition] de l'enregistrement N
 void Lecture_EEPROM(unsigned char N, unsigned char Tab_transition [8]);
-// TODO
+// retourne le nombre d'enregistrements 
 unsigned char Size_EEPROM();
 
 //------------------------------ FONCTION DE SUPPRESSION EEPROM -------------------------------------------------------------------------------------------------------------------------------------------
 
-// TODO
+// Clean tout l'EEPROM
 void Supp_ALL_EEPROM();
-// TODO
+// on lit toute l'EEPROM pour voir si des data on ete supprime
 void Lecture_donnees_supp();
-// TODO
+// supprime l'enregistrement p et place mets dans le Tab_Adresse_supp[10] l'emplacement de la données supprimee
 void Supp_data_EEPROM(unsigned char p);
 
 //------------------------------ DECLARATION VARIABLE EN RAM -------------------------------------------------------------------------------------------------------------------------------------------
@@ -161,8 +161,8 @@ void Stockage_EEPROM(unsigned char annee ,unsigned char mois , unsigned char jou
             Ecriture_EEPROM(15+x*8, seconde);
             Ecriture_EEPROM(16+x*8, partie_entiere_survitesse);
             Ecriture_EEPROM(17+x*8, partie_decimal_survitesse);
-            Tab_Adresse_supp[x] = 0xff; //remplace la valeur du tableau a la position de la dernière suppression par 0xff
-            x-- ; //déincrement la pos dans le tableau
+            Tab_Adresse_supp[x] = 0xff; //remplace la valeur du tableau a la position de la derniÃ¨re suppression par 0xff
+            x-- ; //dÃ©increment la pos dans le tableau
         }
         
     }
@@ -196,7 +196,7 @@ void Stockage_TAB_EEPROM(unsigned char TAB[8],unsigned char NB_elem) // TAB[8] =
                 Ecriture_EEPROM(10+i+x*8 , TAB[i]);
             }
         
-            Tab_Adresse_supp[x] = 0xff; //remplace la valeur du tableau a la position de la dernière suppression par 0xff
+            Tab_Adresse_supp[x] = 0xff; //remplace la valeur du tableau a la position de la derniÃ¨re suppression par 0xff
             x-- ; //decremente la pos dans le tableau
         
         }
@@ -268,7 +268,7 @@ void Supp_data_EEPROM(unsigned char p)
         for(unsigned char i = 0 ; i<8 ; i++)
         {
 
-            Ecriture_EEPROM(10+i+p*8 , 0xff);  // remplacement des données par -1 
+            Ecriture_EEPROM(10+i+p*8 , 0xff);  // remplacement des donnees par 0xff
             suppression = 1;
             if(N>0)
             N--;
@@ -295,7 +295,7 @@ void Lecture_donnees_supp()
                 x++;// on saute les adresses comprise ,int mois , int jour  , int heure, int minute,int seconde,  int partie_entiere_survitesse, int partie_decimal_survitesse
             }
         }
-        affichage(adresse_segment[2],pos_segment[x]); //affiche sur le 2eme segment le nombre de données supprimer
+        affichage(adresse_segment[2],pos_segment[x]); //affiche sur le 2eme segment le nombre de donnÃ©es supprimer
     }
     else
     {
