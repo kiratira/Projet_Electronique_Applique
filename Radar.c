@@ -45,7 +45,7 @@ void main(void) {
     // Déclaration du tableau pour les 7 segments
     int pos_segment[16]={0b01000100,0b11110101,0b10001100,0b10100100,0b00110101,0b00100110,0b00000110,0b11110100,0b00000100,0b00100100,0b00010100,0b00000111,0b01001110,0b10000101,0b00001110, 0b00011110};
     // Déclaration du tableau pour choisir les 7 segments
-    char Seg[4] = {0b01000000,0b01000110,0b01001110,0b01000010};
+    char Seg[4] = {0b01000010,0b01000110,0b01000000,0b01001110};
     // Compteur 
     char cp = 0;
     char cp2 = 1;
@@ -53,26 +53,45 @@ void main(void) {
     char trame[10];
     char start = 0;
     // tableau de valeur à envoyer au radar
-    char data[5] = {0b10101010,0b01010101,0b00000000,0b00001010,0b01000000};
+    char data[5] = {0b10101010,0b01010101,0b00000000,0b00011000,0b01000001};
     Led5 = 0;
     Led4 = 0;
+    
+    while(cp < 5){
+    sendDataUART(data[cp]);
+    cp++;
+    __delay_ms(100);
+    }
+    
     // Boucle infinie
     while(1){
-        Led4 = 1;
-        while(cp < 5){
-            sendDataUART(data[cp]);
-            cp++;
-        }
-        Led5 = 1;
-        __delay_ms(5000);
-        /*
-       Led4 = 0; //DEBUG
+       sendData7Seg(Seg[2], pos_segment[0]);
        start = getDataUART(); //Il plante ICI le 2�me passage
-       __delay_ms(1000); //DEBUG
-       Led4 = !Led4; //DEBUG
-       if(start == 170){
+       Led4 = 1;
+       Led5 = 0;
+       if(start == 0xAA){
+           trame[0] = start;
+           //sendData7Seg(Seg[0], pos_segment[trame[0]>>4]);
+           //sendData7Seg(Seg[1], pos_segment[trame[0]& 0b00001111]);
+           while(cp2 < 10){
+               Led4 = 0;
+               Led5 = 1;
+               trame[cp2] = getDataUART();   
+               sendData7Seg(Seg[3], pos_segment[cp2]);
+               if (cp2 == 4 && trame[4] > 0x02){
+                   
+                 sendData7Seg(Seg[0], pos_segment[trame[4]/16]); //dizaine
+                 sendData7Seg(Seg[1], pos_segment[trame[4]%16]); //unit�
+               }
+               Led5 = 0;
+               cp2++;
+           }
+          cp2 = 1;
+           
+           
+           /*
            Led5 = 1; //DEBUG
-           __delay_ms(1000);//DEBUG
+           __delay_ms(100);//DEBUG
            trame[0] = start;
            while(cp2 < 10){
                trame[cp2] = getDataUART();
@@ -81,11 +100,14 @@ void main(void) {
                }
                cp2++;
            }
-           cp2 = 1;
+           
+            * */
        }
-    __delay_ms(1000); //DEBUG
-         * */
-    }     
+       else{
+           sendData7Seg(Seg[2], pos_segment[1]);
+       }
+       Led5 = 0;
+    }    
     return;
 }
 
@@ -100,9 +122,14 @@ void sendDataUART(char data){
 // Fonction pour recevoir des données du radar
 char getDataUART(){
     char data;
-        
-    RCSTAbits.CREN = 1;
+    
+    RCSTAbits.CREN = 1;    
     while(!PIR1bits.RCIF);
+    if(OERR){
+        RCSTAbits.CREN = 0;
+        RCSTAbits.CREN = 1;
+        OERR = 0;
+    }
     data = RCREG;
     PIR1bits.RCIF = 0;
     
