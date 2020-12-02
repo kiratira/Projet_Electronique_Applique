@@ -26,8 +26,11 @@
 
 #include <xc.h>
 #define _XTAL_FREQ 20000000
-#define MAX_DELETED_DATA 16
-#define MAX_DATA 30
+
+#define EEPROM_MAX_DELETED_DATA 16
+#define EEPROM_MAX_DATA 30
+#define EEPROM_DATA_SPACE 8
+
 
 //------------------------------ FONCTION ECRITURE EEPROM ------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -47,7 +50,7 @@ void EEPROM_Stockage(
 );
 
 // Ecris un enregistrement du radar dans l'EEPROM (utilise un tableau contenant les 8 donnees necessaire)
-void EEPROM_Stockage_TAB(unsigned char TAB[8]);
+void EEPROM_Stockage_TAB(unsigned char TAB[EEPROM_DATA_SPACE]);
 
 //------------------------------ FONCTION LECTURE EEPROM -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -58,9 +61,9 @@ unsigned char EEPROM_Lecture_DataCount();
 //Va lire si il y eu suppression de données (case 1 de L'EEPROM)
 unsigned char EEPROM_Lecture_Flag_Data_Delete();
 //Lire la N éme(DataIndex)donnees des 10 dernières enregistrement et le place dans un tab
-static __bit EEPORM_Lecture_10Last(unsigned char DataIndex, unsigned char Tab_transition [8]);
+static __bit EEPORM_Lecture_10Last(unsigned char DataIndex, unsigned char Tab_transition [EEPROM_DATA_SPACE]);
 // Lis et Transmets dans le [Tab_transition] de l'enregistrement N
-void EEPROM_Lecture_Enregistrement(unsigned char DataIndex, unsigned char Tab_transition [8]);
+void EEPROM_Lecture_Enregistrement(unsigned char DataIndex, unsigned char Tab_transition [EEPROM_DATA_SPACE]);
 // retourne le nombre d'enregistrements 
 unsigned char EEPROM_NBR_Enregistrements();
 
@@ -75,8 +78,8 @@ void EEPROM_Supp_data(unsigned char DataIndex);
 
 //------------------------------ DECLARATION VARIABLE EN RAM -------------------------------------------------------------------------------------------------------------------------------------------
 
-unsigned char Tab_data_transition[8] ; //tableau dans lequel les donnees qui doivent être lu son envoyees
-unsigned char Tab_Adresse_supp[MAX_DELETED_DATA];
+unsigned char Tab_data_transition[EEPROM_DATA_SPACE] ; //tableau dans lequel les donnees qui doivent être lu son envoyees
+unsigned char Tab_Adresse_supp[EEPROM_MAX_DELETED_DATA];
 unsigned char SaveDataCount =0;
 unsigned char DataCount = 0; //nombre d'enregistrement
 static __bit Flag_Data_Delete = 0; //donnee supp oui/non
@@ -122,7 +125,7 @@ void main(void)
     SSPCON2 = 0;
 
     //tableau de test 
-    unsigned char tableau[8] = {
+    unsigned char tableau[EEPROM_DATA_SPACE] = {
         pos_segment[0],
         pos_segment[1],
         pos_segment[2],
@@ -132,7 +135,7 @@ void main(void)
         pos_segment[6],
         pos_segment[7]
     };
-    unsigned char tab[8]={48,48,48,48,48,48,48,48}; //ASCII {0,0,0,0,0,0,0,0} près pour le test uart
+    unsigned char tab[EEPROM_DATA_SPACE]={48,48,48,48,48,48,48,48}; //ASCII {0,0,0,0,0,0,0,0} près pour le test uart
     
     //Initialisation
    
@@ -202,21 +205,21 @@ void EEPROM_Ecriture(unsigned char adresse, unsigned char data)
 
 void EEPROM_Stockage(unsigned char annee ,unsigned char mois , unsigned char jour  , unsigned char heure, unsigned char minute,unsigned char seconde,  unsigned char partie_entiere_survitesse, unsigned char partie_decimal_survitesse)
 {  
-    if(DataCount <= MAX_DATA)  //Check si on depasse pas la limite max d'enregistement possible
+    if(DataCount <= EEPROM_MAX_DATA)  //Check si on depasse pas la limite max d'enregistement possible
     {
         if(Flag_Data_Delete==1) // Check si une data a été effacer
         {
             if(Tab_Adresse_supp[DeletedData] != 0xff) //check si la valeur comprise dans le tableau est =! de 0xff
             {
                 //Ecrit les valeurs
-                EEPROM_Ecriture(16+Tab_Adresse_supp[DeletedData]*8, annee); //-1 car incrémentation faites aprés Voir fct Supp_data_EEPROM(unsigned char DataIndex)        
-                EEPROM_Ecriture(17+Tab_Adresse_supp[DeletedData]*8, mois);
-                EEPROM_Ecriture(18+Tab_Adresse_supp[DeletedData]*8, jour);
-                EEPROM_Ecriture(19+Tab_Adresse_supp[DeletedData]*8, heure);
-                EEPROM_Ecriture(20+Tab_Adresse_supp[DeletedData]*8, minute);
-                EEPROM_Ecriture(21+Tab_Adresse_supp[DeletedData]*8, seconde);
-                EEPROM_Ecriture(22+Tab_Adresse_supp[DeletedData]*8, partie_entiere_survitesse);
-                EEPROM_Ecriture(23+Tab_Adresse_supp[DeletedData]*8, partie_decimal_survitesse);
+                EEPROM_Ecriture(16+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, annee); //-1 car incrémentation faites aprés Voir fct Supp_data_EEPROM(unsigned char DataIndex)        
+                EEPROM_Ecriture(17+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, mois);
+                EEPROM_Ecriture(18+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, jour);
+                EEPROM_Ecriture(19+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, heure);
+                EEPROM_Ecriture(20+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, minute);
+                EEPROM_Ecriture(21+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, seconde);
+                EEPROM_Ecriture(22+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, partie_entiere_survitesse);
+                EEPROM_Ecriture(23+Tab_Adresse_supp[DeletedData]*EEPROM_DATA_SPACE, partie_decimal_survitesse);
                              
                 Tab_Adresse_supp[DeletedData-1] = 0xff; //remplace la valeur du tableau a la position de la derniere suppression par 0xff           
                 DeletedData-- ; //decremente le nombre de data supprimer la pos dans le tableau 
@@ -234,14 +237,14 @@ void EEPROM_Stockage(unsigned char annee ,unsigned char mois , unsigned char jou
         else 
         {
             //Ecrit les valeurs
-                EEPROM_Ecriture(16+DataCount*8, annee);
-                EEPROM_Ecriture(17+DataCount*8, mois);
-                EEPROM_Ecriture(18+DataCount*8, jour);
-                EEPROM_Ecriture(19+DataCount*8, heure);
-                EEPROM_Ecriture(20+DataCount*8, minute);
-                EEPROM_Ecriture(21+DataCount*8, seconde);
-                EEPROM_Ecriture(22+DataCount*8, partie_entiere_survitesse);
-                EEPROM_Ecriture(23+DataCount*8, partie_decimal_survitesse);
+                EEPROM_Ecriture(16+DataCount*EEPROM_DATA_SPACE, annee);
+                EEPROM_Ecriture(17+DataCount*EEPROM_DATA_SPACE, mois);
+                EEPROM_Ecriture(18+DataCount*EEPROM_DATA_SPACE, jour);
+                EEPROM_Ecriture(19+DataCount*EEPROM_DATA_SPACE, heure);
+                EEPROM_Ecriture(20+DataCount*EEPROM_DATA_SPACE, minute);
+                EEPROM_Ecriture(21+DataCount*EEPROM_DATA_SPACE, seconde);
+                EEPROM_Ecriture(22+DataCount*EEPROM_DATA_SPACE, partie_entiere_survitesse);
+                EEPROM_Ecriture(23+DataCount*EEPROM_DATA_SPACE, partie_decimal_survitesse);
 
             
 
@@ -260,9 +263,9 @@ void EEPROM_Stockage(unsigned char annee ,unsigned char mois , unsigned char jou
 
 }
 
-void EEPROM_Stockage_TAB(unsigned char TAB[8]) // TAB[8] = {int annee ,int mois , int jour  , int heure, int minute,int seconde,  int partie_entiere_survitesse, int partie_decimal_survitesse};
+void EEPROM_Stockage_TAB(unsigned char TAB[EEPROM_DATA_SPACE]) // TAB[8] = {int annee ,int mois , int jour  , int heure, int minute,int seconde,  int partie_entiere_survitesse, int partie_decimal_survitesse};
 {
-    if(DataCount < MAX_DATA)  //Check si on depasse pas la limite max d'enregistement possible
+    if(DataCount < EEPROM_MAX_DATA)  //Check si on depasse pas la limite max d'enregistement possible
     {
         //enregistre dans les 10 derniers
         EEPROM_Last_SaveData();
@@ -271,9 +274,9 @@ void EEPROM_Stockage_TAB(unsigned char TAB[8]) // TAB[8] = {int annee ,int mois 
             if(Tab_Adresse_supp[DeletedData-1] != 0xff) //check si la valeur comprise dans le tableau est =! de 0xff
             {
                 //Ecrit les données suivant le tableau d'adressage
-                for(unsigned char i = 0; i < 8; i++)
+                for(unsigned char i = 0; i < EEPROM_DATA_SPACE; i++)
                 {
-                    EEPROM_Ecriture(16+i+Tab_Adresse_supp[DeletedData-1]*8 , TAB[i]); //-1 car incrémentation faites aprés Voir fct Supp_data_EEPROM(unsigned char DataIndex)
+                    EEPROM_Ecriture(16+i+Tab_Adresse_supp[DeletedData-1]*EEPROM_DATA_SPACE , TAB[i]); //-1 car incrémentation faites aprés Voir fct Supp_data_EEPROM(unsigned char DataIndex)
                 }
 
                 Tab_Adresse_supp[DeletedData-1] = 0xff; //remplace la valeur du tableau a la position de la derniere suppression par 0xff           
@@ -291,9 +294,9 @@ void EEPROM_Stockage_TAB(unsigned char TAB[8]) // TAB[8] = {int annee ,int mois 
         else
         {
             //Ecris les donnees dans l'EEPROM suivant le tableau d'adressage
-            for(unsigned char i =0 ; i<8; i++)
+            for(unsigned char i =0 ; i<EEPROM_DATA_SPACE; i++)
             {
-                EEPROM_Ecriture(16+i+DataCount*8 , TAB[i]);
+                EEPROM_Ecriture(16+i+DataCount*EEPROM_DATA_SPACE , TAB[i]);
             }    
         }
         
@@ -340,26 +343,26 @@ unsigned char EEPROM_Lecture_Flag_Data_Delete()
     else
     return EEPROM_Lecture_data(1); //suppression = (addresse 1 dans l'EEPROM)
 }
-static __bit EEPORM_Lecture_10Last(unsigned char DataIndex, unsigned char Tab_transition [8])
+static __bit EEPORM_Lecture_10Last(unsigned char DataIndex, unsigned char Tab_transition [EEPROM_DATA_SPACE])
 {   
     // /!\ pas TESTER 
     unsigned char Data = EEPROM_Lecture_data(6+DataIndex);
     if(DataIndex <0 && DataIndex >10 && Data != 0xff)
     {
-        for(unsigned char i = 0; i < 8; i++)
+        for(unsigned char i = 0; i < EEPROM_DATA_SPACE; i++)
         {
-            Tab_transition [i] = EEPROM_Lecture_data(16 + i + Data *8);
+            Tab_transition [i] = EEPROM_Lecture_data(16 + i + Data *EEPROM_DATA_SPACE);
         }
         return 1;
     }
     else
         return 0;
 }
-void EEPROM_Lecture_Enregistrement(unsigned char DataIndex, unsigned char Tab_transition [8]) // envoie les donnee dans le tableau de transition de donnees
+void EEPROM_Lecture_Enregistrement(unsigned char DataIndex, unsigned char Tab_transition [EEPROM_DATA_SPACE]) // envoie les donnee dans le tableau de transition de donnees
 {   
-    for(unsigned char i = 0; i < 8; i++)
+    for(unsigned char i = 0; i < EEPROM_DATA_SPACE; i++)
     {
-        Tab_transition [i] = EEPROM_Lecture_data(16 + i + DataIndex*8);
+        Tab_transition [i] = EEPROM_Lecture_data(16 + i + DataIndex*EEPROM_DATA_SPACE);
     }
 }
 
@@ -375,14 +378,14 @@ void EEPROM_Reset_ALL() //Clear l'eeprom
    for(unsigned char i = 0 ; i < 30 ; i++)
    {
         PORTBbits.RB5 = !PORTBbits.RB5;
-        EEPROM_Ecriture(16+i*8,0xFF);
-        EEPROM_Ecriture(17+i*8,0xFF);
-        EEPROM_Ecriture(18+i*8,0xFF);
-        EEPROM_Ecriture(19+i*8,0xFF);
-        EEPROM_Ecriture(20+i*8,0xFF);
-        EEPROM_Ecriture(21+i*8,0xFF);
-        EEPROM_Ecriture(22+i*8,0xFF);
-        EEPROM_Ecriture(23+i*8,0xFF);
+        EEPROM_Ecriture(16+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(17+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(18+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(19+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(20+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(21+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(22+i*EEPROM_DATA_SPACE,0xFF);
+        EEPROM_Ecriture(23+i*EEPROM_DATA_SPACE,0xFF);
         
    }
    EEPROM_Ecriture(0,0b00000000);//reset nbr enregistrement
@@ -402,7 +405,7 @@ void EEPROM_Reset_ALL() //Clear l'eeprom
      
    
    //reset du tableau d'adresse supprimer
-   for(int i = 0; i<MAX_DELETED_DATA;i++)
+   for(int i = 0; i<EEPROM_MAX_DELETED_DATA;i++)
    Tab_Adresse_supp[i]= 0xff;
 
    DeletedData = 0; //reset du nombre de valeur supprimer
@@ -411,9 +414,9 @@ void EEPROM_Reset_ALL() //Clear l'eeprom
 
 void EEPROM_Supp_data(unsigned char DataIndex)
 {
-    if(EEPROM_Lecture_data(16+DataIndex*8) != 0xff)//check si l'élement est diff de 0xff pour pas effacer 2 fois
+    if(EEPROM_Lecture_data(16+DataIndex*EEPROM_DATA_SPACE) != 0xff)//check si l'élement est diff de 0xff pour pas effacer 2 fois
     {
-        if(DeletedData >= 0 && DeletedData < MAX_DELETED_DATA)//check si on peut supprimer des données
+        if(DeletedData >= 0 && DeletedData < EEPROM_MAX_DELETED_DATA)//check si on peut supprimer des données
         {
             
                 
@@ -425,9 +428,9 @@ void EEPROM_Supp_data(unsigned char DataIndex)
             EEPROM_Ecriture(1,1);
 
             // Effacement des donnees en les remplacant par 0xff
-            for(unsigned char i = 0 ; i<8 ; i++)
+            for(unsigned char i = 0 ; i<EEPROM_DATA_SPACE ; i++)
             {
-                EEPROM_Ecriture(16+i+DataIndex*8 , 0xff);  
+                EEPROM_Ecriture(16+i+DataIndex*EEPROM_DATA_SPACE , 0xff);  
             }
             EEPROM_Ecriture(2,DataIndex); //écris a l'adresse 2 la derniére adresses supprimer 
 
@@ -452,7 +455,7 @@ void EEPROM_Supp_data(unsigned char DataIndex)
                 }
             }
         }
-        else if(DeletedData < MAX_DELETED_DATA) //ERREUR DE RANGE : on peut pas supprimer de données tableau complet
+        else if(DeletedData < EEPROM_MAX_DELETED_DATA) //ERREUR DE RANGE : on peut pas supprimer de données tableau complet
         {
             ;
         }
@@ -467,8 +470,10 @@ void EEPROM_Supp_data(unsigned char DataIndex)
 void EEPROM_Analyser_Deleted_Data()
 {
     //partie 10 dernieres
-    if(EEPROM_Lecture_data(6)> 0 && EEPROM_Lecture_data(6)<10)
-    SaveDataCount = EEPROM_Lecture_data(6);
+    if(EEPROM_Lecture_data(3)> 0 && EEPROM_Lecture_data(3)<=10)
+    {
+       SaveDataCount = EEPROM_Lecture_data(3);
+    }    
     else
         SaveDataCount = 0;
     //partie suppression
@@ -476,6 +481,7 @@ void EEPROM_Analyser_Deleted_Data()
     
     if(EEPROM_Lecture_Flag_Data_Delete()) // si il y a au minimum une donnee supprimee
     {
+        
         for(unsigned char i = 0 ;i < 30 ; i++)
         {
             PORTBbits.RB5 = !PORTBbits.RB5;           
@@ -483,12 +489,13 @@ void EEPROM_Analyser_Deleted_Data()
             {
               break;  
             }          
-            if(EEPROM_Lecture_data(16+8*i) == 0xff ) //si la lecture a l'adresse 16+8*i est effacee
+            if(EEPROM_Lecture_data(16+EEPROM_DATA_SPACE*i) == 0xff ) //si la lecture a l'adresse 16+8*i est effacee
             {
                 
                 Tab_Adresse_supp[DeletedData] = i; //rentre l'adresse du la donnee supprimee de la ou on se trouve (i)dans le tableau d'adresse supp             
                 DeletedData++;//incremente le nombre de donnees supprimer
-                EEPROM_Ecriture(2,i); //écris a l'adresse 2 la derniére adresses supprimer         
+                EEPROM_Ecriture(2,i); //écris a l'adresse 2 la derniére adresses supprimer 
+                
             }
             else
             {
@@ -516,9 +523,9 @@ void EEPROM_Last_SaveData()
 {
     if(SaveDataCount < 10)
     {   if(Flag_Data_Delete)
-        EEPROM_Ecriture(6+SaveDataCount, Tab_Adresse_supp[DeletedData-1]);
+            EEPROM_Ecriture(6+SaveDataCount, Tab_Adresse_supp[DeletedData-1]);
         else
-        EEPROM_Ecriture(6+SaveDataCount, DataCount); //ecrit a partir de l'adresse 6 les data save
+            EEPROM_Ecriture(6+SaveDataCount, DataCount); //ecrit a partir de l'adresse 6 les data save
         //incremente SaveDataCount
         SaveDataCount ++;
         EEPROM_Ecriture(3,SaveDataCount);         
