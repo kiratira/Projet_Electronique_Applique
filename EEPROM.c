@@ -1,3 +1,5 @@
+
+
 /*
  * File:   EEPROM.c
  * Author: capal
@@ -441,11 +443,11 @@ void EEPROM_Supp_data(unsigned char DataIndex)
                 EEPROM_Ecriture(0,DataCount);
             }
             //Supprimer si DataIndex dans les 10 derniers enregistrements
-            for(int i =0 ; i<10;i++)
+            for(int i =0 ; i<10;i++) //parcour les 10 derniers enregistrements pour vérifier si le dataindex est dedans
             {
                 if(DataIndex == EEPROM_Lecture_data(6+i)) //si l'enregistrement est dans les 10 derniers enregistrements le supprime (remplace par 0xff)
                 {
-                    for(int j = i;j<10;j++)
+                    for(int j = i;j<10;j++) //on decalle tout
                     {
                         EEPROM_Ecriture(6+j,EEPROM_Lecture_data(7+j));
                     }                    
@@ -469,13 +471,14 @@ void EEPROM_Supp_data(unsigned char DataIndex)
 
 void EEPROM_Analyser_Deleted_Data()
 {
-    //partie 10 dernieres
-    if(EEPROM_Lecture_data(3)> 0 && EEPROM_Lecture_data(3)<=10)
+    //verification du nombre de donnees sauvees 
+    if(EEPROM_Lecture_data(3)> 0 && EEPROM_Lecture_data(3)<=10) 
     {
-       SaveDataCount = EEPROM_Lecture_data(3);
+       SaveDataCount = EEPROM_Lecture_data(3); //reprend la ou c'était arreté 0 à 10
     }    
     else
-        SaveDataCount = 0;
+        SaveDataCount = 0; // recommence à 0
+        EEPROM_Ecriture(3,SaveDataCount); 
     //partie suppression
     int dataCount = 0; //conteneur de donnees lue
     
@@ -521,25 +524,28 @@ void EEPROM_initialization()
 }
 void EEPROM_Last_SaveData()
 {
-    if(SaveDataCount < 10)
-    {   if(Flag_Data_Delete)
-            EEPROM_Ecriture(6+SaveDataCount, Tab_Adresse_supp[DeletedData-1]);
+    if(SaveDataCount < 10) //si le nombre de donnees savees n'est pas a son max
+    {   
+        if(Flag_Data_Delete) //si il y a eu une suppression de donnee
+            EEPROM_Ecriture(6+SaveDataCount, Tab_Adresse_supp[DeletedData-1]); //ecrit dans les donnees sauvees la position des nouvelles donnees
         else
             EEPROM_Ecriture(6+SaveDataCount, DataCount); //ecrit a partir de l'adresse 6 les data save
+        
         //incremente SaveDataCount
         SaveDataCount ++;
         EEPROM_Ecriture(3,SaveDataCount);         
     }
     else
     {
-        //decal tout
+        //decalle les la pile de donnees sauvees
         for(int i = 0 ; i<9 ; i ++)
         {
-            EEPROM_Ecriture(6+i,EEPROM_Lecture_data(7+i));
+            EEPROM_Ecriture(6+i,EEPROM_Lecture_data(7+i)); //ecrit a la position 6+i la valeur ecrite a la position 7+i
             PORTBbits.RB5 = !PORTBbits.RB5;
         }
+        //Ecrit a la derniere position des dataSave la position de la nouvelle data
         if(Flag_Data_Delete)
-            EEPROM_Ecriture(15, Tab_Adresse_supp[DeletedData-1]);
+            EEPROM_Ecriture(15, Tab_Adresse_supp[DeletedData-1]); //cas : si une donnees a ete supp
         else            
             EEPROM_Ecriture(15, DataCount); //ecrit a partir de l'adresse 6 les data save                
     }
@@ -559,3 +565,5 @@ void affichage(unsigned char adresse, unsigned char data)
     SSPCON2bits.PEN = 1;
     while(!PIR1bits.SSPIF);
 }
+
+
