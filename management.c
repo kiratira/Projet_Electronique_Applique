@@ -28,14 +28,21 @@
 #define SURVITESSE 50
 #define _XTAL_FREQ 20000000
 
+void init_all(){
+    i2c_init();
+    LCD_init();
+    EEPROM_initialization();
+    Init_RTC;
+}
+
 void main(void) {
+    init_all();
     
     while(1){
         if(unsigned char vitesse = get_vitesse(SURVITESSE)){
             unsigned char tab_RTC[6];
             Read_RTC(tab_RTC);
 
-            unsigned char tab_EEPROM[8]; // Format : AA   MM   JJ   HH   SS   Entier Vitesse   Decimale Vitesse
             // Copie la date dans le tableau destiné a l'EEPROM
             for(unsigned char i = 0; i < 6; i++){
                 tab_EEPROM[i] = tab_RTC[i];
