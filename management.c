@@ -41,7 +41,10 @@ void main(void) {
     unsigned char vitesse = 0;
     unsigned char tab_EEPROM[8]; // Format : AA   MM   JJ   HH   SS   Entier Vitesse   Decimale Vitesse
     while(1){
-        if(unsigned char vitesse = get_vitesse(SURVITESSE)){
+        if(PORTAbits.RA0 == 0){}
+        if(PORTAbits.RA1 == 0){}
+        if(PORTAbits.RA2 == 0){}
+
         // En cas de survitesse crée un enregistrement dans l'EEPROM
         if(vitesse = get_vitesse(SURVITESSE)){
             unsigned char tab_RTC[6];
