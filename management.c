@@ -38,8 +38,12 @@ void init_all(){
 void main(void) {
     init_all();
     
+    unsigned char vitesse = 0;
+    unsigned char tab_EEPROM[8]; // Format : AA   MM   JJ   HH   SS   Entier Vitesse   Decimale Vitesse
     while(1){
         if(unsigned char vitesse = get_vitesse(SURVITESSE)){
+        // En cas de survitesse crée un enregistrement dans l'EEPROM
+        if(vitesse = get_vitesse(SURVITESSE)){
             unsigned char tab_RTC[6];
             Read_RTC(tab_RTC);
 
