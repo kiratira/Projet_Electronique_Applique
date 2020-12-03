@@ -157,18 +157,7 @@ void LCD_setline(char poscursor);
 void LCD_setposcursor(char pos);
 void LCD_affichradardata(int tab[8], char num);
 
-void init_all(){
-    // LCD
-    i2c_init();
-    LCD_init();
-    // EEPROM
-    EEPROM_initialization();
-    // RTC
-    char a[6] = {0,0,0,0,0,0};
-    RTC_Init_tab(a);
-    // RADAR
-    setSurvitesse(SURVITESSE);
-}
+void init_all();
 
 void main(void) {
     //I/O
@@ -598,6 +587,20 @@ void main(void) {
     }
     return;
 }
+// INIT ALL
+void init_all(){
+    // LCD
+    i2c_init();
+    LCD_init();
+    // EEPROM
+    EEPROM_initialization();
+    // RTC
+    char a[6] = {0,0,0,0,0,0};
+    RTC_Init_tab(a);
+    // RADAR
+    setSurvitesse(SURVITESSE);
+}
+
 // EEPROM
 //------------------------------ FONCTION ECRITURE EEPROM ------------------------------------------------------------------------------------------------------------------------------------------
 
