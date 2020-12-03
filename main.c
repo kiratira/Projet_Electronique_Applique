@@ -26,7 +26,7 @@
 #include <xc.h> 
 
 #define SURVITESSE 50
-#define _XTAL_FREQ 20000000
+#define _XTAL_FREQ 16000000
 
 // EEPROM
 #define EEPROM_MAX_DELETED_DATA 16
