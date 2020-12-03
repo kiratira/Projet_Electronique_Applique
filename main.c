@@ -97,7 +97,7 @@ unsigned char DeletedData = 0; //nombre de valeur supprimer
 //------------------------------ DECLARATION / FONCTION AUTRE  -------------------------------------------------------------------------------------------------------------------------------------------
 void EEPROM_initialization();
 void EEPROM_Last_SaveData();
-//void affichage(unsigned char adresse, unsigned char data); //affichage 7 segments
+void affichage(unsigned char adresse, unsigned char data); //affichage 7 segments
 
 unsigned char pos_segment[16]={0b01000100,0b11110101,0b10001100,0b10100100,0b00110101,0b00100110,0b00000110,0b11110100,0b00000100,0b00100100,0b00010100,0b00000111,0b01001110,0b10000101,0b00001110, 0b00011110};
 //(0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F) pour le pcb reel
@@ -123,7 +123,7 @@ char uniteSurvitesse = 0;
 char decSurvitesse = 0;
 
 //////////////////////////////////////////////////////////////////////////////// RTC
-//void RTC_affichage(unsigned char adresse, unsigned char data);
+void RTC_affichage(unsigned char adresse, unsigned char data);
 void RTC_Send(char adresse, char regis ,char data);  
 char RTC_Recieve(char adresse, char regis);  
 char RTC_Init (char secondes, char minutes, char heures, char jour, char mois, char annee);
@@ -194,21 +194,26 @@ void main(void) {
     // Config de l'EEPROM
     EECON1 = 0b1000100;
     
-    // LCD
+    //////////////////////////////////////////////////////////////////////////// LCD
     unsigned int cpt = 0;//compteur de temps
+    
     //Variables pour bouger dans les différents menus d'affichage du LCD :
     unsigned char posmainmenu = 0, poseditmenu = 0, posspeedmenu = 0, menuselect = 0, posspeeddisplaymenu = 0;
+    
     //variable pour le numéro de l'excès de vitesse qu'on veut afficher depuis le menu d'affichage du LCD :
     int num = 0;
+    
     //variables ~ équivalentes à un booléen, mais qui prennent que 1 bit de mémoire. Aussi pour faire fonctionner le menu d'affichage du LCD :
     static __bit confirm = 0, confirmdelete=0, confirmdate =0, confirmtime=0, quitspeed = 0, quitallspeed = 0, eeprom_is_full = 0;
     static __bit setdatetime = 0, displayspeed = 0, displayallspeed = 0, setday = 0, setmon = 0, setyear = 0, setmin = 0, sethour = 0;
+    
     //Tableau contenant {jour, mois, année, minute, heure} pour régler et afficher la date et l'heure sur le LCD :
     unsigned int initDateTime[6] = {1, 1, 20, 0, 12, 0};
+    
     //Tableau contenant 1 excès de vitesse envoyé à la demande lorsqu'on veut afficher cet excès à l'écran {année, mois, jour, heure, min, sec, entier, déc } :
     int radardata[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     
-    //Radar
+    //////////////////////////////////////////////////////////////////////////// Radar
     // Déclaration du tableau pour les 7 segments
     int pos_segment[16] = {
         0b01000100,
