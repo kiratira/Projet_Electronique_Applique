@@ -25,7 +25,7 @@ char sendData7Seg(char address, char data);
 char waitFlag();
 void scanVitesse();
 void setSurvitesse(char vitesse);
-char tabValueForEEPROM(char tab);
+void tabValueForEEPROM(char tab[]);
 
  //variable Global pour radar
 char survitesse = 2;
@@ -51,12 +51,14 @@ void main(void) {
     CVRCON = 0;         
     ADCON1 = 6;         //disable analog
     TRISA = 0b00000011;
-    TRISB = 0b00000000;    
+    TRISB = 0b00000000; 
+    
+    Led4 = 0;
     
     int pos_segment[16]={0b01000100,0b11110101,0b10001100,0b10100100,0b00110101,0b00100110,0b00000110,0b11110100,0b00000100,0b00100100,0b00010100,0b00000111,0b01001110,0b10000101,0b00001110, 0b00011110}; // Déclaration du tableau pour les 7 segments
     char Seg[4] = {0b01000010,0b01000110,0b01000000,0b01001110}; // Déclaration du tableau pour choisir les 7 segments
     char data[5] = {0b10101010,0b01010101,0b00000000,0b00011000,0b01000001}; // tableau de valeur à envoyer au radar
-    char tabEEPROM[8]; // 
+    char tabEEPROM[8]; 
 
     runRadar = 1; // TEST MISE EN ROUTE DU CHECK RADAR
     
@@ -130,18 +132,21 @@ void scanVitesse(){
     char trash = 0;
     char cp2 = 1;
     char checkSurvitesse = 0;
+    char sensi = 2;
 
     while(runRadar){
         trash = getDataUART();
         if(trash == 0xAA){
             while(cp2 < 10){
                 trash = getDataUART();   
-                if (cp2 == 4 && trash > survitesse){  
+                if (cp2 == 4 && trash > survitesse && (((trash - uniteSurvitesse) > sensi)||(trash - uniteSurvitesse) < -sensi)){  
                     checkSurvitesse = 1;
                     uniteSurvitesse = trash;
+                    
                }
                 if (cp2 == 5 && checkSurvitesse){  
                     decSurvitesse = trash;
+                    
                }
                cp2++;
            }
@@ -155,9 +160,8 @@ void setSurvitesse(char vitesse){
     survitesse = vitesse;
 }
 //FONCTION D'ECRITURE DU TABLEAU
-char tabValueForEEPROM(char tab){
+void tabValueForEEPROM(char tab[]){
     //Read_RTC(tab);
     tab[6] = uniteSurvitesse;
     tab[7] = decSurvitesse;
-    return tab;
 }
