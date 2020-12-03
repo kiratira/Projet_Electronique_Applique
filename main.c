@@ -1031,12 +1031,12 @@ char waitFlag(){
 //fonction de reception des trames du radar
 void scanVitesse(){ 
  
-    char trash = 0; 
-    char cp2 = 1; 
-    char checkSurvitesse = 0; 
-    char sensi = 2; 
+    char trash = 0;
+    char cp2 = 1;
+    char checkSurvitesse = 0;
+    char sensi = 2;
  
-    while(runRadar){ 
+    while(!PORTAbits.RA0){ 
         trash = getDataUART(); 
         if(trash == 0xAA){ 
             while(cp2 < 10){ 
