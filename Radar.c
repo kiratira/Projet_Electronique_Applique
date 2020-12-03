@@ -125,16 +125,11 @@ char scanVitesse(){
     char data = 0;
 
     while(runRadar){
-        sendData7Seg(Seg[2], pos_segment[0]);
         trash = getDataUART();
-        if(start == 0xAA){
-            trash = start;
+        if(trash == 0xAA){
             while(cp2 < 10){
                 trash = getDataUART();   
-                sendData7Seg(Seg[3], pos_segment[cp2]);
                 if (cp2 == 4 && trash > survitesse){  
-                    sendData7Seg(Seg[0], pos_segment[trash/16]); //dizaine
-                    sendData7Seg(Seg[1], pos_segment[trash%16]); //unite
                     checkSurvitesse = 1;
                     data = trash;
                }
@@ -142,7 +137,7 @@ char scanVitesse(){
            }
           cp2 = 1;         
        }
-       if (checkSurvitesse = 1)break;
+       if (checkSurvitesse == 1)break;
     }
     return data;
 }
